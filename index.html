@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snelling Staffing — Full Intelligence + Calculator + BD Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f0;--bg-2:#efecea;--bg-3:#e8e4de;--white:#ffffff;
+  --ink:#1a1714;--ink-2:#4a4540;--ink-3:#8a8480;
+  --navy:#1a2b4a;--navy-2:#2c4a7c;--navy-bg:#e6f1fb;--navy-bdr:#8cb5e0;
+  --teal:#0e7f6e;--teal-bg:#e6f5f2;--teal-bdr:#7dcbc2;
+  --amber:#c47c14;--amber-bg:#fef3dc;--amber-bdr:#f0c96a;
+  --coral:#c0392b;--coral-bg:#fdf0ee;--coral-bdr:#e8a49e;
+  --purple:#6b4cb8;--purple-bg:#f2eefb;--purple-bdr:#c4b4f0;
+  --green:#1e7a48;--green-bg:#e8f7ef;--green-bdr:#7ecda0;
+  --border:#ddd9d3;--border-2:#ccc8c2;
+  --shadow-sm:0 1px 3px rgba(26,23,20,.07),0 1px 2px rgba(26,23,20,.05);
+  --shadow-md:0 4px 12px rgba(26,23,20,.08),0 2px 4px rgba(26,23,20,.05);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:100;background:rgba(247,245,240,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 36px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:var(--shadow-sm)}
+.hdr-brand{font-family:'Playfair Display',serif;font-size:16px;color:var(--ink);text-decoration:none;font-weight:700}
+.hdr-brand span{color:var(--navy)}
+.hdr-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase}
+.nav-pills{display:flex;gap:2px}
+.nav-pill{font-size:11px;font-weight:500;color:var(--ink-2);text-decoration:none;padding:4px 12px;border-radius:20px;transition:all .15s;white-space:nowrap}
+.nav-pill:hover{background:var(--bg-3);color:var(--ink)}
+.nav-pill.active{background:var(--navy);color:#fff}
+
+/* ── HERO ── */
+.hero{padding:64px 40px 48px;max-width:1120px;margin:0 auto;border-bottom:1px solid var(--border);animation:fadeUp .45s ease both .05s}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--navy);letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;max-width:48px;height:1px;background:var(--navy-bdr)}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,52px);line-height:1.1;color:var(--ink);margin-bottom:18px;font-weight:700}
+.hero-title em{color:var(--navy);font-style:italic}
+.hero-sub{font-size:14px;color:var(--ink-2);max-width:600px;line-height:1.8;margin-bottom:32px;font-weight:300}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--ink);font-weight:600}
+.hero-stat-num span{color:var(--navy)}
+.hero-stat-label{font-size:10px;color:var(--ink-3);margin-top:2px;font-weight:500}
+
+/* ── VERDICT ── */
+.verdict{max-width:1120px;margin:32px auto;padding:0 40px;animation:fadeUp .45s ease both .12s}
+.verdict-inner{background:var(--navy-bg);border:1px solid var(--navy-bdr);border-radius:14px;padding:24px 32px;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;box-shadow:var(--shadow-sm)}
+.verdict-icon{font-size:36px;line-height:1}
+.verdict-text h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--navy);margin-bottom:5px;font-weight:600}
+.verdict-text p{font-size:13px;color:var(--ink-2);max-width:540px;line-height:1.65}
+.verdict-score-num{font-family:'Playfair Display',serif;font-size:40px;color:var(--navy);line-height:1;font-weight:700;text-align:right}
+.verdict-score-label{font-size:10px;color:var(--ink-3);margin-top:3px;text-align:right}
+
+/* ── SECTION ── */
+.section{max-width:1120px;margin:0 auto;padding:44px 40px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-header{margin-bottom:24px}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.section-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);font-weight:600}
+
+/* ── GRIDS ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.full{grid-column:1/-1}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:15px 14px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card-label{font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;font-weight:600}
+.card-num{font-family:'Playfair Display',serif;font-size:22px;line-height:1;margin-bottom:4px;font-weight:700}
+.card-num.navy{color:var(--navy)}
+.card-num.teal{color:var(--teal)}
+.card-num.amber{color:var(--amber)}
+.card-num.coral{color:var(--coral)}
+.card-sub{font-size:11px;color:var(--ink-3)}
+
+/* ── NOTES ── */
+.note{border-radius:0 8px 8px 0;padding:13px 16px;font-size:13px;line-height:1.65;border-left:3px solid}
+.note.teal{background:var(--teal-bg);border-color:var(--teal);color:var(--ink-2)}
+.note.amber{background:var(--amber-bg);border-color:var(--amber);color:var(--ink-2)}
+.note.navy{background:var(--navy-bg);border-color:var(--navy);color:var(--ink-2)}
+.note.coral{background:var(--coral-bg);border-color:var(--coral);color:var(--ink-2)}
+.note.green{background:var(--green-bg);border-color:var(--green);color:var(--ink-2)}
+
+/* ── TERRITORY ── */
+.territory-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.t-opt{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow-sm)}
+.t-opt.rec{border:2px solid var(--navy);background:var(--navy-bg)}
+.t-badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.07em}
+.t-badge.rec{background:var(--navy);color:white}
+.t-badge.alt{background:var(--bg-3);color:var(--ink-3)}
+.t-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.t-opt.rec .t-title{color:var(--navy)}
+.zip-row{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
+.zip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid}
+.t-opt.rec .zip{background:white;border-color:var(--navy-bdr);color:var(--navy)}
+.t-opt:not(.rec) .zip{background:var(--bg-3);border-color:var(--border);color:var(--ink-3)}
+.t-body{font-size:12px;color:var(--ink-2);line-height:1.65}
+.t-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.t-stat{background:rgba(255,255,255,.7);border-radius:6px;padding:7px 9px}
+.t-stat-label{font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.t-stat-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--ink)}
+.key-ask{background:var(--white);border:1px solid var(--amber-bdr);border-radius:10px;padding:14px 18px;margin-top:14px}
+.key-ask-title{font-size:12px;font-weight:600;color:var(--amber);margin-bottom:5px}
+.key-ask-body{font-size:12px;color:var(--ink-2);line-height:1.65}
+
+/* ── WHITE PLAINS BOX ── */
+.wp-box{background:linear-gradient(135deg,var(--navy-bg),var(--teal-bg));border:1.5px solid var(--navy-bdr);border-radius:12px;padding:20px 24px;margin-bottom:18px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.wp-icon{font-size:28px;line-height:1}
+.wp-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.wp-body{font-size:13px;color:var(--ink-2);line-height:1.65}
+
+/* ── PRESSURE ── */
+.pressure-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.p-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.p-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px}
+.p-name{font-size:13px;font-weight:600;color:var(--ink)}
+.p-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;text-transform:uppercase;letter-spacing:.06em}
+.badge-red{background:var(--coral-bg);color:var(--coral);border:1px solid var(--coral-bdr)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.p-bar-track{height:3px;background:var(--bg-3);border-radius:2px;margin-bottom:10px;overflow:hidden}
+.p-bar-fill{height:3px;border-radius:2px}
+.p-body{font-size:12px;color:var(--ink-2);line-height:1.65}
+.fifth-p{margin-top:12px;background:linear-gradient(135deg,var(--teal-bg),var(--navy-bg));border:1px solid var(--teal-bdr);border-radius:12px;padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.fifth-icon{font-size:22px;line-height:1}
+.fifth-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.fifth-body{font-size:12px;color:var(--ink-2);line-height:1.65}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.score-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.score-label{width:120px;color:var(--ink-2);flex-shrink:0;font-weight:500}
+.score-bar-track{flex:1;height:3px;background:var(--bg-3);border-radius:2px;overflow:hidden}
+.score-bar-fill{height:3px;border-radius:2px}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);width:26px;text-align:right;flex-shrink:0}
+
+/* ── COMP TABLE ── */
+.comp-table{width:100%;border-collapse:collapse}
+.comp-table thead tr{border-bottom:2px solid var(--border-2)}
+.comp-table th{text-align:left;font-size:10px;font-weight:600;color:var(--ink-3);letter-spacing:.09em;text-transform:uppercase;padding:7px 10px 10px}
+.comp-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+.comp-table tbody tr:hover{background:var(--bg-2)}
+.comp-table td{padding:11px 10px;font-size:12px;color:var(--ink-2);vertical-align:top}
+.comp-table td:first-child{font-weight:600;color:var(--ink)}
+.threat-high{color:var(--coral);font-weight:600}
+.threat-med{color:var(--amber);font-weight:600}
+.threat-low{color:var(--green);font-weight:600}
+
+/* ── INVEST ── */
+.invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.invest-block{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;box-shadow:var(--shadow-sm)}
+.invest-block-title{font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:12px;font-weight:600}
+.invest-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.invest-row:last-child{border-bottom:none}
+.invest-row-label{color:var(--ink-2)}
+.invest-row-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+.invest-row-val.amber{color:var(--amber)}
+.invest-row-val.green{color:var(--green)}
+.invest-row-val.coral{color:var(--coral)}
+
+/* ── CALCULATOR ── */
+.calc-wrap{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px 28px;box-shadow:var(--shadow-md)}
+.calc-controls{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-bottom:20px}
+.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.slider-label{font-size:11px;color:var(--ink-2);width:190px;flex-shrink:0;font-weight:500}
+.slider-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;min-width:64px;text-align:right;color:var(--ink)}
+.calc-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.calc-kpi{background:var(--bg-2);border-radius:8px;padding:12px}
+.calc-kpi-label{font-size:10px;color:var(--ink-3);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.calc-kpi-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700}
+.calc-kpi-sub{font-size:10px;color:var(--ink-3);margin-top:2px}
+.calc-kpi-val.green{color:var(--green)}
+.calc-kpi-val.red{color:var(--coral)}
+.calc-kpi-val.amber{color:var(--amber)}
+.calc-kpi-val.navy{color:var(--navy)}
+.bar-wrap{display:flex;height:9px;background:var(--bg-3);border-radius:5px;overflow:hidden;margin-bottom:7px}
+.bar-legend{display:flex;flex-wrap:wrap;gap:9px;font-size:10px;color:var(--ink-3);margin-bottom:16px}
+.leg-item{display:flex;align-items:center;gap:4px}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.bd-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.bd-table th{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;padding:5px 9px 8px;text-align:right;border-bottom:1px solid var(--border-2)}
+.bd-table th:first-child{text-align:left}
+.bd-table td{padding:7px 9px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.bd-table td:not(:first-child){text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px}
+.bd-table tr.grp td{font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;padding-top:12px;padding-bottom:3px;border-bottom:none}
+.bd-table tr.sub td{font-weight:600;background:var(--bg-2)}
+.bd-table tr.tot td{font-weight:600;font-size:13px;border-top:2px solid var(--border-2);border-bottom:none}
+.bd-table tr.ind td:first-child{padding-left:20px;color:var(--ink-2)}
+.col-pct{color:var(--ink-3)}
+.col-red{color:var(--coral)}
+.col-green{color:var(--green)}
+.col-amber{color:var(--amber)}
+.tier-note{font-size:11px;color:var(--ink-2);padding:9px 13px;background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:8px;line-height:1.55;margin-bottom:14px}
+.chart-wrap{position:relative;width:100%;height:200px;margin-top:14px}
+
+/* ── INSIGHTS ── */
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.insight{border-left:3px solid;background:var(--white);border-radius:0 10px 10px 0;padding:14px 16px;box-shadow:var(--shadow-sm)}
+.insight.teal{border-color:var(--teal)}
+.insight.amber{border-color:var(--amber)}
+.insight.navy{border-color:var(--navy)}
+.insight.purple{border-color:var(--purple)}
+.insight.coral{border-color:var(--coral)}
+.insight.green{border-color:var(--green)}
+.insight-title{font-size:12px;font-weight:600;margin-bottom:5px}
+.insight.teal .insight-title{color:var(--teal)}
+.insight.amber .insight-title{color:var(--amber)}
+.insight.navy .insight-title{color:var(--navy)}
+.insight.purple .insight-title{color:var(--purple)}
+.insight.coral .insight-title{color:var(--coral)}
+.insight.green .insight-title{color:var(--green)}
+.insight-body{font-size:12px;color:var(--ink-2);line-height:1.65}
+
+/* ── RISKS ── */
+.risks-list{display:flex;flex-direction:column;gap:7px}
+.risk-row{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 14px;box-shadow:var(--shadow-sm)}
+.risk-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3);padding-top:2px}
+.risk-title{font-size:12px;font-weight:600;color:var(--coral);margin-bottom:3px}
+.risk-body{font-size:12px;color:var(--ink-2);line-height:1.6}
+
+/* ── BD PLAN ── */
+.bd-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;background:var(--white)}
+.bd-tab{flex:1;padding:8px 6px;font-size:11px;font-weight:600;color:var(--ink-3);text-align:center;cursor:pointer;border-right:1px solid var(--border);transition:all .15s;line-height:1.3}
+.bd-tab:last-child{border-right:none}
+.bd-tab.active{background:var(--navy);color:#fff}
+.bd-tab:hover:not(.active){background:var(--bg-2)}
+.bd-section{display:none}
+.bd-section.show{display:block}
+
+.phase-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.phase-hdr{padding:9px 14px;border-bottom:1px solid var(--border);background:var(--bg-2);display:flex;align-items:center;gap:8px}
+.phase-hdr-title{font-size:12px;font-weight:700;color:var(--navy)}
+.phase-hdr-sub{font-size:10px;color:var(--ink-3);margin-left:auto}
+.phase-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px}
+
+.timeline{position:relative;padding-left:26px;padding:12px 12px 12px 36px}
+.tl-line{position:absolute;left:16px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-24px;top:3px;width:9px;height:9px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px currentColor}
+.tl-week{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.tl-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.tl-body{font-size:11px;color:var(--ink-2);line-height:1.6}
+.tl-tags{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.tl-tag{font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px}
+
+.g1 .tl-dot,.g1 .tl-week{color:var(--teal)}
+.g2 .tl-dot,.g2 .tl-week{color:var(--purple)}
+.g3 .tl-dot,.g3 .tl-week{color:var(--navy)}
+
+.script-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.script-hdr{padding:9px 14px;border-bottom:1px solid var(--border);background:var(--bg-2);font-size:11px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:6px}
+.script-lbl{font-size:10px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin:10px 14px 0;display:block}
+.script-body{margin:6px 14px 12px;padding:10px 12px;background:var(--bg-2);border-radius:8px;font-size:11px;color:var(--ink-2);line-height:1.7;font-style:italic}
+
+.pipeline-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--bg-3);font-size:12px}
+.pipeline-row:last-child{border-bottom:none}
+.pipeline-lbl{color:var(--ink-2)}
+.pipeline-val{font-weight:600;color:var(--ink)}
+.pipeline-val.g{color:var(--green)}
+.pipeline-val.r{color:var(--coral)}
+
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.ct-zone{border-radius:12px;padding:18px}
+.ct-zone.a{background:var(--navy-bg);border:1px solid var(--navy-bdr)}
+.ct-zone.b{background:var(--purple-bg);border:1px solid var(--purple-bdr)}
+.ct-zone-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:8px}
+.ct-zone.a .ct-zone-title{color:var(--navy)}
+.ct-zone.b .ct-zone-title{color:var(--purple)}
+.ct-zone-body{font-size:12px;color:var(--ink-2);line-height:1.7}
+
+.q-list{display:flex;flex-direction:column;gap:6px}
+.q-row{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 14px;box-shadow:var(--shadow-sm);transition:box-shadow .15s}
+.q-row:hover{box-shadow:var(--shadow-md)}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--navy);font-weight:600}
+.q-text{font-size:12px;color:var(--ink-2);line-height:1.5}
+.q-cat{font-size:9px;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;white-space:nowrap}
+.cat-wc{background:var(--navy-bg);color:var(--navy)}
+.cat-ct{background:var(--purple-bg);color:var(--purple)}
+.cat-fin{background:var(--amber-bg);color:var(--amber)}
+.cat-ops{background:var(--teal-bg);color:var(--teal)}
+.cat-leg{background:var(--coral-bg);color:var(--coral)}
+
+/* ── FOOTER ── */
+.footer{max-width:1120px;margin:0 auto;padding:24px 40px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+.footer-brand{font-family:'Playfair Display',serif;font-size:14px;color:var(--ink-3)}
+.footer-brand span{color:var(--navy)}
+.footer-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:800px){
+  .header{padding:0 16px}
+  .hero,.verdict,.section{padding-left:16px;padding-right:16px}
+  .grid-4,.grid-2,.grid-3,.territory-compare,.pressure-grid,.invest-grid,.calc-controls,.calc-kpi-grid,.insights-grid,.score-grid,.ct-grid{grid-template-columns:1fr}
+  .verdict-inner{grid-template-columns:1fr}
+  .nav-pills{display:none}
+  .footer{flex-direction:column;gap:6px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="hdr-brand" href="#">Snelling <span>Staffing</span></a>
+  <span class="hdr-badge">White Plains HQ · Westchester + Connecticut · June 2026</span>
+  <nav class="nav-pills">
+    <a href="#territory" class="nav-pill">Territory</a>
+    <a href="#market"    class="nav-pill">Market</a>
+    <a href="#pressures" class="nav-pill">Pressures</a>
+    <a href="#competition" class="nav-pill">Competitors</a>
+    <a href="#investment"  class="nav-pill">Investment</a>
+    <a href="#calculator"  class="nav-pill">Calculator</a>
+    <a href="#bd"          class="nav-pill">BD Plan</a>
+    <a href="#risks"       class="nav-pill">Risks</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Snelling Franchise Intelligence · Market + Calculator + BD Plan</div>
+  <h1 class="hero-title">White Plains–based<br><em>Westchester + Connecticut</em> Market</h1>
+  <p class="hero-sub">Southern Westchester's industrial corridor anchored from White Plains — Metro-North access, central logistics position, proximity to Yonkers/Mount Vernon worker pool and Elmsford/Tarrytown employer cluster. Connecticut as Month 2+ growth market.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">34<span>K</span></div><div class="hero-stat-label">Firms, Westchester County</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">29<span>K</span></div><div class="hero-stat-label">Warehouse/transport workers, region</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">$17</div><div class="hero-stat-label">Westchester min wage Jan 2026</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">$16<span>.94</span></div><div class="hero-stat-label">Connecticut min wage Jan 2026</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">5<span>.8</span></div><div class="hero-stat-label">Composite pressure score / 10</div></div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="verdict-inner">
+    <div class="verdict-icon">🟦</div>
+    <div class="verdict-text">
+      <h2>Navy Ocean — Active, Competitive, Winnable from White Plains</h2>
+      <p>This is an established, competitive staffing market with national players (Adecco, Randstad, Manpower, Express Employment) and strong regional agencies already present. <strong>White Plains HQ is the correct logistics choice</strong> — Metro-North connectivity brings workers from Yonkers, Mount Vernon, and the Bronx directly to your office; your 5 top employer targets are within 10 miles; and the I-287/I-87 interchange gives you fast access to the Elmsford industrial corridor. Your structural edge is HireQuest's employer-of-record model — no competitor eliminates WC and payroll risk for clients the same way.</p>
+    </div>
+    <div>
+      <div class="verdict-score-num">5.8</div>
+      <div class="verdict-score-label">/ 10 composite<br>pressure score</div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 TERRITORY -->
+<section class="section" id="territory">
+  <div class="section-header">
+    <div class="section-tag">01 — Territory &amp; Location</div>
+    <div class="section-title">White Plains — why it's the right base for light industrial staffing</div>
+  </div>
+
+  <div class="wp-box">
+    <div class="wp-icon">🚉</div>
+    <div>
+      <div class="wp-title">White Plains is the logistics hub of the entire Westchester staffing market</div>
+      <div class="wp-body">Metro-North Grand Central–White Plains line runs every 15–30 minutes — workers from Yonkers, Bronxville, Harlem, and the South Bronx can reach you directly without a car. The White Plains Transportation Center connects bus routes from Mount Vernon and Yonkers. Your 5 top employer targets (Keurig Dr Pepper in Elmsford, Unis Logistics in Mount Vernon, transFORM in New Rochelle, Ultrafabrics in Elmsford, Regeneron in Tarrytown) are all within 12 miles. White Plains has abundant affordable office space ($18–26/sqft) compared to Manhattan corridors, and the city's walkable downtown means your own staff can commute easily. <strong>This is the correct operational anchor for this franchise.</strong></div>
+    </div>
+  </div>
+
+  <div class="territory-compare">
+    <div class="t-opt rec">
+      <span class="t-badge rec">✓ Primary zone — launch here</span>
+      <div class="t-title">Southern Westchester Industrial Corridor</div>
+      <div class="zip-row">
+        <span class="zip">Elmsford 10523</span><span class="zip">Yonkers 10701</span>
+        <span class="zip">Mount Vernon 10550</span><span class="zip">New Rochelle 10801</span>
+        <span class="zip">Tarrytown 10591</span><span class="zip">White Plains 10601</span>
+        <span class="zip">Port Chester 10573</span><span class="zip">Ardsley 10502</span>
+      </div>
+      <div class="t-body">The industrial core of Westchester. Warehouses, 3PLs, food distributors, light manufacturers — this is where your clients are. From White Plains you are 7–15 minutes from every target. Yonkers and Mount Vernon provide your worker pool: large blue-collar labor markets with Metro-North and bus access directly to your office. This sub-market has <strong>enough employer density to support 40–80+ placed workers</strong> without leaving a 15-mile radius.</div>
+      <div class="t-stats">
+        <div class="t-stat"><div class="t-stat-label">Drive to Elmsford</div><div class="t-stat-val">8 min (I-287)</div></div>
+        <div class="t-stat"><div class="t-stat-label">Drive to Mount Vernon</div><div class="t-stat-val">12 min</div></div>
+        <div class="t-stat"><div class="t-stat-label">Metro-North to Yonkers</div><div class="t-stat-val">7 min</div></div>
+        <div class="t-stat"><div class="t-stat-label">Worker pool access</div><div class="t-stat-val">Yonkers 200K + Mt Vernon 68K</div></div>
+      </div>
+    </div>
+    <div class="t-opt">
+      <span class="t-badge alt">Month 2+ expansion</span>
+      <div class="t-title">Connecticut — Stamford / Bridgeport / New Haven</div>
+      <div class="zip-row">
+        <span class="zip">Greenwich 06830</span><span class="zip">Stamford 06901</span>
+        <span class="zip">Norwalk 06850</span><span class="zip">Bridgeport 06604</span>
+        <span class="zip">Stratford 06615</span><span class="zip">New Haven 06510</span>
+      </div>
+      <div class="t-body">Two distinct CT markets: Stamford/Greenwich (Fortune 500 HQ corridor, admin/clerical roles, $28–40/hr bill rates) and Bridgeport/Stratford/New Haven (manufacturing + logistics, light industrial, $24–30/hr). White Plains is 30 min to Stamford via I-95. Confirm: does your Snelling territory agreement include CT, or is that a separate franchise?</div>
+      <div class="t-stats">
+        <div class="t-stat"><div class="t-stat-label">Drive to Stamford</div><div class="t-stat-val">30 min (I-287/I-95)</div></div>
+        <div class="t-stat"><div class="t-stat-label">CT manufacturing workers</div><div class="t-stat-val">29,100 (BLS Dec 2024)</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="key-ask">
+    <div class="key-ask-title">Confirm with HQ Franchising before signing</div>
+    <div class="key-ask-body"><em>"I want my Snelling territory defined around southern Westchester zip codes — Elmsford, Yonkers, Mount Vernon, New Rochelle, Tarrytown, Port Chester, and White Plains. Please confirm whether Connecticut (Stamford, Greenwich, Bridgeport) is included in my territory or whether that requires a separate agreement or right of first refusal."</em></div>
+  </div>
+</section>
+
+<!-- 02 MARKET -->
+<section class="section" id="market">
+  <div class="section-header">
+    <div class="section-tag">02 — Market Context</div>
+    <div class="section-title">Why Westchester + Connecticut works for Snelling light industrial</div>
+  </div>
+  <div class="grid-4">
+    <div class="card"><div class="card-label">Westchester firms</div><div class="card-num navy">34K</div><div class="card-sub">400K total employees</div></div>
+    <div class="card"><div class="card-label">Warehouse/transport (region)</div><div class="card-num navy">29,200</div><div class="card-sub">BLS Dec 2024, rising monthly</div></div>
+    <div class="card"><div class="card-label">CT manufacturing workers</div><div class="card-num teal">29,100</div><div class="card-sub">Bridgeport-Stamford-Norwalk metro</div></div>
+    <div class="card"><div class="card-label">Westchester min wage 2026</div><div class="card-num amber">$17.00</div><div class="card-sub">CPI-indexed from 2027</div></div>
+    <div class="card"><div class="card-label">Connecticut min wage 2026</div><div class="card-num teal">$16.94</div><div class="card-sub">+$0.59 effective Jan 1, 2026</div></div>
+    <div class="card"><div class="card-label">Industrial vacancy rate</div><div class="card-num navy">~6%</div><div class="card-sub">Near record low = more employers</div></div>
+    <div class="card"><div class="card-label">Westchester median HH income</div><div class="card-num amber">$119K</div><div class="card-sub">Clients can afford premium staffing</div></div>
+    <div class="card"><div class="card-label">Bioscience cluster (WC)</div><div class="card-num teal">8,000</div><div class="card-sub">Largest in NY State — admin/clerical opp</div></div>
+  </div>
+  <div class="note navy"><strong>The $17 minimum wage insight:</strong> Westchester's minimum wage floor means your realistic pay rate starts at $19–22/hr for reliable light industrial workers. At a 1.4× markup your bill rate is $27–31/hr — a gross margin of $7–9/hr. This is tighter than lower-cost states but clients here have already accepted expensive labor and are far less price-sensitive. Your pitch is <strong>reliability and risk elimination</strong>, not cost savings. The employer-of-record model removes WC and payroll exposure entirely — lead with that on every call.</div>
+</section>
+
+<!-- 03 PRESSURES -->
+<section class="section" id="pressures">
+  <div class="section-header">
+    <div class="section-tag">03 — Market Pressure Model</div>
+    <div class="section-title">Five pressures applied to Snelling Westchester + CT</div>
+  </div>
+  <div class="pressure-grid">
+    <div class="p-card">
+      <div class="p-head"><div class="p-name">1. Recruiting / advertising cost</div><span class="p-badge badge-red">High · 7.5</span></div>
+      <div class="p-bar-track"><div class="p-bar-fill" style="width:75%;background:var(--coral)"></div></div>
+      <div class="p-body">Sourcing workers in the NYC metro is expensive. Indeed Sponsored Jobs, ZipRecruiter, Facebook geo-ads, background checks ($25/hire), drug screens ($35/hire) add $100–200 per placed worker. Fixed platform costs of $800+/month run regardless of fill rate. <strong>Your single largest operational cost pressure.</strong> Mitigated by referral bonuses — once you have 5+ active workers, worker-to-worker referrals are your cheapest and most reliable channel.</div>
+    </div>
+    <div class="p-card">
+      <div class="p-head"><div class="p-name">2. Worker supply — transportation barrier</div><span class="p-badge badge-amber">Medium-High · 6.5</span></div>
+      <div class="p-bar-track"><div class="p-bar-fill" style="width:65%;background:var(--amber)"></div></div>
+      <div class="p-body">Your worker pool (Yonkers, Mount Vernon, South Bronx) earns median $45–60K — they need your job but many lack cars. 6am warehouse shifts are when Metro-North runs infrequently. <strong>White Plains HQ solves part of this</strong> — workers can reach your office by train or bus, then you dispatch. High no-show rates are the #1 cause of early failure for light industrial agencies. Build a 30% bench surplus over active placements from Day 1.</div>
+    </div>
+    <div class="p-card">
+      <div class="p-head"><div class="p-name">3. Client demand quantity</div><span class="p-badge badge-green">Favorable · 2.5</span></div>
+      <div class="p-bar-track"><div class="p-bar-fill" style="width:25%;background:var(--teal)"></div></div>
+      <div class="p-body">Demand is strong and structural. Industrial vacancy near record lows means new employers keep arriving. 34,000 Westchester firms, multiple 3PLs, manufacturers, food distributors all within 15 miles. The question in this market is never whether clients exist — it is whether you can fill orders fast enough. Client demand pressure is low. Supply-side execution is your real constraint.</div>
+    </div>
+    <div class="p-card">
+      <div class="p-head"><div class="p-name">4. Margin corridor — HQ fee stack</div><span class="p-badge badge-amber">Medium · 5.5</span></div>
+      <div class="p-bar-track"><div class="p-bar-fill" style="width:55%;background:var(--amber)"></div></div>
+      <div class="p-body">HQ takes 4.5% of payroll (funding cost) + 18% of gross margin (royalty) + up to 3% health pool + 2% WC/security = roughly 33–37% of gross margin before your fixed costs. At $20 pay / $28 bill ($8 GM/hr) you keep ~$4.51/hr Franchisee's Share. Workable at scale — requires 1,700+ billable hours/month to cover typical fixed costs. Break-even at ~8–10 employees at full hours.</div>
+    </div>
+  </div>
+  <div class="fifth-p">
+    <div class="fifth-icon">⚖️</div>
+    <div>
+      <div class="fifth-title">5. Competitive intensity — nationals + strong regionals already entrenched</div>
+      <div class="fifth-body">Adecco, Randstad, Manpower, Express Employment, Merritt Staffing (CT), and Hamilton Connections (CT) are all active in your market — some with 25+ years of client relationships. You win not on price or brand, but on the employer-of-record differentiator (no client WC or payroll exposure) and owner-operator responsiveness (you answer at 6am when a client's shift is short; Adecco sends them to a call center). <strong>Pressure: Medium-High (6.5).</strong> Winnable through account-by-account relationship building, not mass marketing.</div>
+    </div>
+  </div>
+  <div style="margin-top:14px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;box-shadow:var(--shadow-sm)">
+    <div style="font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin-bottom:14px">Composite pressure summary</div>
+    <div class="score-grid">
+      <div class="score-row"><div class="score-label">Recruiting cost</div><div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:var(--coral)"></div></div><div class="score-num">7.5</div></div>
+      <div class="score-row"><div class="score-label">Worker supply</div><div class="score-bar-track"><div class="score-bar-fill" style="width:65%;background:var(--amber)"></div></div><div class="score-num">6.5</div></div>
+      <div class="score-row"><div class="score-label">Client demand</div><div class="score-bar-track"><div class="score-bar-fill" style="width:25%;background:var(--teal)"></div></div><div class="score-num">2.5</div></div>
+      <div class="score-row"><div class="score-label">Margin corridor</div><div class="score-bar-track"><div class="score-bar-fill" style="width:55%;background:var(--amber)"></div></div><div class="score-num">5.5</div></div>
+      <div class="score-row"><div class="score-label">Competition</div><div class="score-bar-track"><div class="score-bar-fill" style="width:65%;background:var(--purple)"></div></div><div class="score-num">6.5</div></div>
+      <div class="score-row"><div class="score-label" style="font-weight:600;color:var(--navy)">Composite</div><div class="score-bar-track"><div class="score-bar-fill" style="width:58%;background:linear-gradient(to right,var(--teal),var(--amber))"></div></div><div class="score-num" style="color:var(--navy);font-weight:600">5.8</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--ink-3);margin-top:8px;line-height:1.5">Score = 10 means maximum pressure/threat. Client demand scored inverse — high demand = low pressure = low score. Overall: active, competitive market with real structural advantages for a well-run Snelling owner-operator.</div>
+  </div>
+</section>
+
+<!-- 04 COMPETITORS -->
+<section class="section" id="competition">
+  <div class="section-header">
+    <div class="section-tag">04 — Competitive Map</div>
+    <div class="section-title">Who you are competing against for Westchester + CT clients</div>
+  </div>
+  <div class="note amber" style="margin-bottom:16px"><strong>Market competition, not system conflict:</strong> Every competitor below is an independent market rival — none has territorial rights in the Snelling/HireQuest system. You can approach any client in any zip code. The differentiator is execution, not rights.</div>
+  <table class="comp-table">
+    <thead><tr><th>Competitor</th><th>Type</th><th>Market presence</th><th>Threat</th><th>Your edge</th></tr></thead>
+    <tbody>
+      <tr><td>Adecco USA</td><td>Global #1. Light industrial + clerical at scale.</td><td>White Plains office. All of Westchester.</td><td class="threat-high">⬤ High</td><td>Adecco routes clients to a call center. You answer at 6am. Snelling's employer-of-record removes WC exposure Adecco doesn't eliminate the same way.</td></tr>
+      <tr><td>Randstad USA</td><td>Global #2. Office/clerical + light industrial.</td><td>White Plains + NYC metro coverage.</td><td class="threat-high">⬤ High</td><td>Same responsiveness argument. Randstad's strength is technology; yours is zero client WC liability and the owner picks up every call personally.</td></tr>
+      <tr><td>Manpower / ManpowerGroup</td><td>Global. Manufacturing + warehouse + admin.</td><td>Active Westchester + Fairfield CT.</td><td class="threat-high">⬤ High</td><td>Manpower shifts some liability back to clients. HQ's model keeps all of it on Snelling/HireQuest — cleaner for clients legally and operationally.</td></tr>
+      <tr><td>Merritt Staffing</td><td>Regional — 28+ years. Stamford + Stratford offices.</td><td>Covers Fairfield County CT + Westchester explicitly.</td><td class="threat-high">⬤ High (CT)</td><td>Deeply entrenched in your CT target market. Attack new accounts, not their long-term clients. Target verticals they under-serve.</td></tr>
+      <tr><td>Express Employment Professionals</td><td>National franchise. 800+ US locations. Light industrial + office.</td><td>Active Fairfield CT. Growing NY metro.</td><td class="threat-med">⬤ Medium</td><td>Fellow franchise system — same structural strengths. Compete on fill speed and worker quality. Your niche is more focused.</td></tr>
+      <tr><td>Hamilton Connections</td><td>Regional — Fairfield CT. Warehouse + manufacturing + general labor.</td><td>Bridgeport/Stratford CT corridor — your CT target zone.</td><td class="threat-med">⬤ Medium (CT)</td><td>Well-positioned locally. Compete on worker quality and faster fill. Physical canvassing of their client base in Month 3.</td></tr>
+      <tr><td>United Staffing Solutions</td><td>Regional independent. Westchester-wide.</td><td>County-wide presence, scattered accounts.</td><td class="threat-med">⬤ Medium</td><td>No franchise system, no employer-of-record infrastructure. Out-system and out-scale them as you grow.</td></tr>
+      <tr><td>Solo operators / independents</td><td>Uninsured or minimally insured sole traders.</td><td>Scattered throughout both markets.</td><td class="threat-low">⬤ Low</td><td>Your WC master policy and E-Verify compliance wins every procurement-gated client. They can't compete for corporate accounts.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 05 INVESTMENT -->
+<section class="section" id="investment">
+  <div class="section-header">
+    <div class="section-tag">05 — Investment Structure</div>
+    <div class="section-title">What you're committing to — Snelling FDD Item 6 + Item 7</div>
+  </div>
+  <div class="invest-grid">
+    <div class="invest-block">
+      <div class="invest-block-title">Initial investment (FDD Item 7)</div>
+      <div class="invest-row"><span class="invest-row-label">Franchise fee (population-based)</span><span class="invest-row-val amber">$2,500 – $25,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">White Plains office rent (monthly)</span><span class="invest-row-val">$1,200 – $2,500/mo</span></div>
+      <div class="invest-row"><span class="invest-row-label">Leasehold improvements + FF&amp;E</span><span class="invest-row-val">$2,000 – $15,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">Equipment (computers, phones)</span><span class="invest-row-val">$3,000 – $5,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">Software (HQ Webconnect + ATS)</span><span class="invest-row-val">$1,000 – $5,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">Opening advertising + recruiting</span><span class="invest-row-val">$2,500 – $8,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">Training + insurance + misc</span><span class="invest-row-val">$3,500 – $16,000</span></div>
+      <div class="invest-row"><span class="invest-row-label">Working capital (12 months)</span><span class="invest-row-val amber">$30,000 – $75,000</span></div>
+      <div class="invest-row"><span class="invest-row-label" style="font-weight:600">Total investment range</span><span class="invest-row-val amber">$45,700 – $151,500</span></div>
+    </div>
+    <div class="invest-block">
+      <div class="invest-block-title">Ongoing HQ fees (FDD Item 6)</div>
+      <div class="invest-row"><span class="invest-row-label">HQ funding cost (payroll advance)</span><span class="invest-row-val coral">4.5% of payroll</span></div>
+      <div class="invest-row"><span class="invest-row-label">HQ royalty on gross margin</span><span class="invest-row-val coral">18% of GM</span></div>
+      <div class="invest-row"><span class="invest-row-label">Health insurance pool (ACA)</span><span class="invest-row-val">Up to 3% of billings</span></div>
+      <div class="invest-row"><span class="invest-row-label">WC loss-ratio risk provision</span><span class="invest-row-val">~1% of billings</span></div>
+      <div class="invest-row"><span class="invest-row-label">Security deposit build</span><span class="invest-row-val">1% of billings (to $15K cap)</span></div>
+      <div class="invest-row"><span class="invest-row-label">Direct deposit fee</span><span class="invest-row-val">$25/month</span></div>
+      <div class="invest-row"><span class="invest-row-label">Technology fee</span><span class="invest-row-val amber">Open-ended — actual cost</span></div>
+      <div class="invest-row"><span class="invest-row-label">Effective HQ take of gross margin</span><span class="invest-row-val coral">~33–37% of GM</span></div>
+      <div class="invest-row"><span class="invest-row-label">Franchisee share / hr (at $20/$28)</span><span class="invest-row-val green">~$4.51/hr</span></div>
+      <div class="invest-row"><span class="invest-row-label">Cash payment lag</span><span class="invest-row-val amber">~5 weeks after billing</span></div>
+    </div>
+  </div>
+  <div class="note amber">
+    <strong>Critical working capital note:</strong> HQ funds temp worker payroll (removing your biggest cash flow risk), but your own fixed costs (staff, rent, recruiting ads at $1,500+/mo) run from Day 1. With a 5-week payment lag on your Franchisee's Share, budget for at least 3 months of fixed costs ($18–25K) before your first check arrives. The $30K working capital floor in the FDD is real — don't launch below it.
+  </div>
+</section>
+
+<!-- 06 CALCULATOR -->
+<section class="section" id="calculator">
+  <div class="section-header">
+    <div class="section-tag">06 — Live P&amp;L Calculator</div>
+    <div class="section-title">Snelling White Plains — FDD-accurate · adjust all assumptions</div>
+  </div>
+  <div class="calc-wrap">
+    <div class="calc-controls">
+      <div>
+        <div class="slider-row"><span class="slider-label">Active placed employees</span><input type="range" id="sl-emps" min="2" max="60" step="1" value="10" style="flex:1"><span class="slider-val" id="out-emps">10</span></div>
+        <div class="slider-row"><span class="slider-label">Employee pay rate ($/hr)</span><input type="range" id="sl-pay" min="17" max="32" step="0.25" value="20" style="flex:1"><span class="slider-val" id="out-pay">$20.00</span></div>
+        <div class="slider-row"><span class="slider-label">Client bill rate ($/hr)</span><input type="range" id="sl-bill" min="22" max="48" step="0.25" value="28" style="flex:1"><span class="slider-val" id="out-bill">$28.00</span></div>
+        <div class="slider-row"><span class="slider-label">Hours / week / employee</span><input type="range" id="sl-hrs" min="30" max="55" step="1" value="40" style="flex:1"><span class="slider-val" id="out-hrs">40</span></div>
+      </div>
+      <div>
+        <div class="slider-row"><span class="slider-label">HQ royalty % of gross margin</span><input type="range" id="sl-roy" min="14" max="22" step="0.5" value="18" style="flex:1"><span class="slider-val" id="out-roy">18%</span></div>
+        <div class="slider-row"><span class="slider-label">Your staff salaries ($/mo)</span><input type="range" id="sl-staff" min="0" max="14000" step="250" value="5500" style="flex:1"><span class="slider-val" id="out-staff">$5,500</span></div>
+        <div class="slider-row"><span class="slider-label">White Plains office rent ($/mo)</span><input type="range" id="sl-rent" min="1000" max="4500" step="100" value="1800" style="flex:1"><span class="slider-val" id="out-rent">$1,800</span></div>
+        <div class="slider-row"><span class="slider-label">Total recruiting budget ($/mo)</span><input type="range" id="sl-rec" min="400" max="6000" step="100" value="1500" style="flex:1"><span class="slider-val" id="out-rec">$1,500</span></div>
+      </div>
+    </div>
+    <div class="calc-kpi-grid">
+      <div class="calc-kpi"><div class="calc-kpi-label">Monthly revenue</div><div class="calc-kpi-val navy" id="m-rev">—</div><div class="calc-kpi-sub" id="m-rev-sub">—</div></div>
+      <div class="calc-kpi"><div class="calc-kpi-label">Franchisee's share / mo</div><div class="calc-kpi-val amber" id="m-share">—</div><div class="calc-kpi-sub" id="m-share-sub">% of billings</div></div>
+      <div class="calc-kpi"><div class="calc-kpi-label">Monthly net profit</div><div class="calc-kpi-val" id="m-profit">—</div><div class="calc-kpi-sub" id="m-margin">—</div></div>
+      <div class="calc-kpi"><div class="calc-kpi-label">Annual net profit</div><div class="calc-kpi-val" id="m-annual">—</div><div class="calc-kpi-sub" id="m-be">—</div></div>
+    </div>
+    <div class="bar-wrap">
+      <div id="bar-wages"  style="background:#1a2b4a"></div>
+      <div id="bar-hq"    style="background:#c0392b"></div>
+      <div id="bar-staff" style="background:#1a5fa8"></div>
+      <div id="bar-rent"  style="background:#6b4cb8"></div>
+      <div id="bar-rec"   style="background:#7f77dd"></div>
+      <div id="bar-other" style="background:#8a8480"></div>
+      <div id="bar-profit" style="background:#1e7a48"></div>
+    </div>
+    <div class="bar-legend">
+      <span class="leg-item"><span class="leg-dot" style="background:#1a2b4a"></span>Temp wages (to HQ)</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#c0392b"></span>HQ fees</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1a5fa8"></span>Staff salaries</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#6b4cb8"></span>Office rent</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#7f77dd"></span>Recruiting</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#8a8480"></span>Tech + other</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1e7a48"></span>Net profit</span>
+    </div>
+    <table class="bd-table">
+      <thead><tr><th>Line item</th><th>% billings</th><th>Monthly $</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600">Gross billings (HQ collects from clients)</td><td class="col-pct">100%</td><td id="b-rev" style="font-weight:600;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px">—</td></tr>
+        <tr class="grp"><td colspan="3">HQ deductions</td></tr>
+        <tr class="ind"><td>Temp wages (HQ pays workers; you reimburse)</td><td class="col-pct" id="b-wpct">—</td><td class="col-red" id="b-wages">—</td></tr>
+        <tr class="ind"><td>HQ funding cost (4.5% of payroll)</td><td class="col-pct" id="b-fpct">—</td><td class="col-red" id="b-fund">—</td></tr>
+        <tr class="ind"><td>HQ royalty (18% of gross margin)</td><td class="col-pct" id="b-rpct">—</td><td class="col-red" id="b-roy">—</td></tr>
+        <tr class="ind"><td>Health pool + WC/security (est. 3.5% of billings)</td><td class="col-pct">3.5%</td><td class="col-red" id="b-pool">—</td></tr>
+        <tr class="sub"><td>Franchisee's share (paid ~5 wks after billing)</td><td class="col-pct" id="b-spct">—</td><td class="col-green" id="b-share">—</td></tr>
+        <tr class="grp"><td colspan="3">Your operating costs</td></tr>
+        <tr class="ind"><td>Staff salaries + 12% payroll burden</td><td class="col-pct" id="b-stpct">—</td><td class="col-red" id="b-staff">—</td></tr>
+        <tr class="ind"><td>White Plains office rent</td><td class="col-pct" id="b-rnpct">—</td><td class="col-red" id="b-rent">—</td></tr>
+        <tr class="ind"><td>Recruiting (job boards + per-hire variable)</td><td class="col-pct" id="b-rcpct">—</td><td class="col-red" id="b-rec">—</td></tr>
+        <tr class="ind"><td>Tech + direct deposit + other</td><td class="col-pct">~0.7%</td><td class="col-red" id="b-tech">—</td></tr>
+        <tr class="tot"><td>Monthly net profit (pre-tax)</td><td class="col-green" id="b-mpct">—</td><td class="col-green" id="b-profit">—</td></tr>
+      </tbody>
+    </table>
+    <div class="tier-note" id="tier-note">Adjust sliders to model your scenarios.</div>
+    <div class="chart-wrap"><canvas id="mainChart" role="img" aria-label="Monthly net profit across 5 to 50 employees headcount scenarios">Net profit across headcount.</canvas></div>
+    <div style="font-size:10px;color:var(--ink-3);margin-top:6px;text-align:center">Monthly net profit at current pay/bill rates across headcount scenarios (5–50 employees)</div>
+  </div>
+</section>
+
+<!-- 07 BD PLAN -->
+<section class="section" id="bd">
+  <div class="section-header">
+    <div class="section-tag">07 — Business Development Plan</div>
+    <div class="section-title">Solo founder · White Plains HQ · All channels · 90-day launch plan</div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:16px">
+    <div class="card"><div class="card-label">Target anchor clients by Day 90</div><div class="card-num navy">5</div></div>
+    <div class="card"><div class="card-label">Active workers placed goal</div><div class="card-num teal">25</div></div>
+    <div class="card"><div class="card-label">Outreach touches / week</div><div class="card-num amber">60+</div></div>
+    <div class="card"><div class="card-label">Channels running parallel</div><div class="card-num navy">4</div></div>
+  </div>
+
+  <div class="note navy" style="margin-bottom:14px">
+    <strong>Your one-line pitch:</strong> <em>"We're a Snelling franchise — the only staffing agency where your temp workers are already W-2 employees before they show up. No payroll risk, no workers' comp exposure, no admin burden for you. You call us Monday, workers are there Tuesday."</em> The HireQuest employer-of-record model is your structural differentiator. Lead with it on every call — it's the one thing no competitor can match exactly.
+  </div>
+
+  <div class="bd-tabs">
+    <div class="bd-tab active" onclick="showBD('overview',this)">Strategy</div>
+    <div class="bd-tab" onclick="showBD('phase',this)">90-Day Plan</div>
+    <div class="bd-tab" onclick="showBD('scripts',this)">Scripts</div>
+    <div class="bd-tab" onclick="showBD('pipeline',this)">Pipeline KPIs</div>
+    <div class="bd-tab" onclick="showBD('ct',this)">Connecticut</div>
+  </div>
+
+  <!-- STRATEGY -->
+  <div class="bd-section show" id="bd-overview">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:var(--navy-bg);border:1px solid var(--navy-bdr);border-radius:10px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Westchester — 70% of effort</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.7">Your home territory. South Westchester industrial corridor within 15 min of White Plains. Keurig Dr Pepper (Elmsford), Unis Logistics (Mount Vernon), transFORM (New Rochelle), Ultrafabrics (Elmsford), food importers (Port Chester).<br><br>Focus here exclusively for the first 60 days until you have 2+ active accounts paying.</div>
+      </div>
+      <div style="background:var(--purple-bg);border:1px solid var(--purple-bdr);border-radius:10px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Connecticut — 30% of effort (Month 2+)</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.7">Stamford/Greenwich = admin/clerical pitch to Fortune 500 HQ corridor. Bridgeport/Stratford = light industrial, same playbook as Westchester. White Plains to Stamford is 30 min on I-287/I-95.<br><br>Do not split focus before you have Westchester momentum.</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Top 6 target segments — ranked by speed to first placement</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--navy)">1. 3PL / Warehouses</strong> — Keurig Dr Pepper (Elmsford), Unis Logistics (Mt Vernon), Ultrafabrics (Elmsford), CWP</span><span class="pipeline-val g">1–3 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--navy)">2. Small/mid manufacturers</strong> — transFORM (New Rochelle), Zelco (Mt Vernon), plastic injection shops (Yonkers)</span><span class="pipeline-val g">1–4 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--navy)">3. Food distribution corridor</strong> — Port Chester, New Rochelle, White Plains food importers and specialty distributors</span><span class="pipeline-val" style="color:var(--amber)">2–4 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--navy)">4. Retail stockroom / seasonal</strong> — The Westchester (White Plains), Ridge Hill (Yonkers) store managers</span><span class="pipeline-val" style="color:var(--amber)">4–6 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--navy)">5. Corporate HQ admin/clerical</strong> — Heineken USA, Danone, Sabra (White Plains), Regeneron (Tarrytown)</span><span class="pipeline-val" style="color:var(--purple)">6–12 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl"><strong style="color:var(--purple)">6. Connecticut</strong> — Stamford admin/clerical (LinkedIn only); Bridgeport/Stratford manufacturing (canvass)</span><span class="pipeline-val" style="color:var(--purple)">Month 2+</span></div>
+    </div>
+  </div>
+
+  <!-- 90-DAY PLAN -->
+  <div class="bd-section" id="bd-phase">
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Phase 1 — Weeks 1–2: Infrastructure + first 20 prospects</span><span class="phase-hdr-sub"><span class="phase-badge" style="background:var(--teal-bg);color:var(--teal)">Pre-launch</span></span></div>
+      <div class="timeline">
+        <div class="tl-line"></div>
+        <div class="tl-item g1">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--teal)">Day 1–3</div>
+          <div class="tl-title">Build your BD infrastructure</div>
+          <div class="tl-body">LinkedIn Sales Navigator search: Industry = "Warehousing and Storage" + "Food and Beverage" + "Plastics Manufacturing" | Geography = White Plains 15-mile radius + Fairfield County CT | Headcount = 25–500 | Title = "Operations Manager" OR "Warehouse Manager" OR "Plant Manager" OR "HR Manager". Export first 50 prospects. Set up Google Sheet CRM: Company / Contact / Title / Phone / Email / Channel / Date / Status / Notes / Next action date.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--navy-bg);color:var(--navy)">LinkedIn Sales Nav</span> <span class="tl-tag" style="background:var(--bg-3);color:var(--ink-3)">CRM setup</span></div>
+        </div>
+        <div class="tl-item g1">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--teal)">Day 3–5</div>
+          <div class="tl-title">Physical canvass — southern Westchester industrial corridor from White Plains</div>
+          <div class="tl-body">Drive Route: White Plains → Elmsford (I-287) → Tarrytown → Port Chester → New Rochelle → Mount Vernon → Yonkers. Stop at every industrial building, distribution center, food warehouse, and manufacturer. Drop a simple half-page leave-behind. Talk to whoever you find. Goal: 15 in-person stops, 5 business cards from decision-makers. Return route takes 3 hours max from White Plains.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--teal-bg);color:var(--teal)">In-person</span> <span class="tl-tag" style="background:var(--bg-3);color:var(--ink-3)">Canvass</span></div>
+        </div>
+        <div class="tl-item g1">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--teal)">Day 5–14</div>
+          <div class="tl-title">LinkedIn + cold call blitz in parallel</div>
+          <div class="tl-body">10 LinkedIn connection requests/day to your prospect list. Simultaneously: 20 cold calls/day to canvass + Sales Nav list. Best answer times: 8–10am and 4–5pm for warehouse/ops managers. Goal: 5 discovery calls booked by end of Week 2. Track every call — answer rate, voicemail, connected, callback booked.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--navy-bg);color:var(--navy)">Cold call</span> <span class="tl-tag" style="background:var(--navy-bg);color:var(--navy)">LinkedIn</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Phase 2 — Weeks 3–6: First contracts + CT launch</span><span class="phase-hdr-sub"><span class="phase-badge" style="background:var(--purple-bg);color:var(--purple)">Active selling</span></span></div>
+      <div class="timeline">
+        <div class="tl-line"></div>
+        <div class="tl-item g2">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--purple)">Week 3</div>
+          <div class="tl-title">Run discovery meetings — close first 2 contracts</div>
+          <div class="tl-body">For every booked call: go in person if at all possible. Bring a one-page rate card and a pre-filled Snelling client service agreement. Key questions: "How many temps are you using now? Who? What's your biggest frustration with them?" Close for a trial order — even 1 worker. Your first placement establishes the account. Never leave a meeting without a next step.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--teal-bg);color:var(--teal)">In-person close</span></div>
+        </div>
+        <div class="tl-item g2">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--purple)">Week 4</div>
+          <div class="tl-title">Launch CT outreach (Stamford/Greenwich) + food corridor blitz</div>
+          <div class="tl-body">Start LinkedIn + email to Stamford/Norwalk/Greenwich prospects while Westchester pipeline is warming. Target: Charter Communications, Synchrony Financial, XPO Logistics. Separately: canvass the Port Chester food import corridor — drive Route 1 from Port Chester to New Rochelle. These are owner-operated food businesses that respond to in-person visits, not cold email.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--purple-bg);color:var(--purple)">CT launch</span> <span class="tl-tag" style="background:var(--teal-bg);color:var(--teal)">Food corridor</span></div>
+        </div>
+        <div class="tl-item g2">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--purple)">Week 5–6</div>
+          <div class="tl-title">Follow-up sequence + referral ask + networking</div>
+          <div class="tl-body">Every discovery call that didn't close: 3-touch follow-up (email Day 3, LinkedIn Day 7, call Day 14). For any active client: ask "Do you know any other ops managers in the area struggling with temp staffing?" Also: join Business Council of Westchester (bcw.org) + White Plains chamber. Not for immediate ROI — for inbound referral pipeline over 6–12 months.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--amber-bg);color:var(--amber)">Follow-up</span> <span class="tl-tag" style="background:var(--green-bg);color:var(--green)">Referral</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Phase 3 — Weeks 7–12: Scale + retain + CT industrial canvass</span><span class="phase-hdr-sub"><span class="phase-badge" style="background:var(--navy-bg);color:var(--navy)">Growth</span></span></div>
+      <div class="timeline">
+        <div class="tl-line"></div>
+        <div class="tl-item g3">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--navy)">Week 7–8</div>
+          <div class="tl-title">Grow existing accounts — expand headcount per client</div>
+          <div class="tl-body">Visit every active client face-to-face. Ask: "Are there other shifts or departments where you need support?" One 3PL account can go from 2 workers to 8 if you're present and delivering quality. Introduce temp-to-hire as an option — clients love the try-before-you-buy model. Also launch your referral bonus program ($50 paid at 30 days) to activate worker-to-worker sourcing.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--green-bg);color:var(--green)">Account growth</span></div>
+        </div>
+        <div class="tl-item g3">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--navy)">Week 9–10</div>
+          <div class="tl-title">CT physical canvass — Bridgeport/Stratford/New Haven industrial corridor</div>
+          <div class="tl-body">Drive I-95 south from White Plains: Bridgeport (55 min) → Stratford → Milford → New Haven (90 min). Same playbook as Westchester canvass — stop at every industrial park. Stamford/Greenwich corporate accounts get email/LinkedIn outreach only — cold canvassing doesn't work at corporate parks with badge access. Batch the New Haven trip as a full day, not a half-day.</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--purple-bg);color:var(--purple)">CT industrial</span> <span class="tl-tag" style="background:var(--teal-bg);color:var(--teal)">In-person</span></div>
+        </div>
+        <div class="tl-item g3">
+          <div class="tl-dot"></div>
+          <div class="tl-week" style="color:var(--navy)">Week 11–12</div>
+          <div class="tl-title">Holiday staffing pitch + 90-day review</div>
+          <div class="tl-body">If launching in Q3: begin pitching holiday staffing contracts now. Retail, distribution, and e-commerce fulfillment need Oct–Jan surge workers — they plan 60–90 days ahead. Offer a fixed-rate holiday contract. Review: active accounts, workers placed, monthly Franchisee's Share. Is it time to hire a recruiter?</div>
+          <div class="tl-tags"><span class="tl-tag" style="background:var(--amber-bg);color:var(--amber)">Seasonal</span> <span class="tl-tag" style="background:var(--bg-3);color:var(--ink-3)">Review</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <div class="bd-section" id="bd-scripts">
+    <div class="script-card">
+      <div class="script-hdr">📞 Cold call — 30-second opener</div>
+      <div class="script-body">"Hi, this is [Name] — I'm with Snelling Staffing, we just opened our White Plains office. I'm calling specifically because we work with warehouses and distribution centers in Westchester, and we handle everything — payroll, workers comp, HR — so your team doesn't have to. I'm not asking for a big commitment, just wondering if there's ever a point where you need extra hands on the floor and it becomes a headache to find them fast. Would 15 minutes this week make sense?"</div>
+      <span class="script-lbl">If they say "we already use a staffing agency":</span>
+      <div class="script-body">"That's great — most of our best clients came to us the same way. Can I ask — when your current agency sends someone who doesn't show up, do you end up eating that shift? That's the problem we solve differently. We'd love a chance to be a backup option — no exclusivity needed."</div>
+      <span class="script-lbl">If they say "we're all set":</span>
+      <div class="script-body">"Completely understand. Can I leave you my number for when that changes? Turnover in warehouse roles tends to spike in summer and around the holidays — when that happens, call me and I'll have someone there within 24 hours."</div>
+    </div>
+    <div class="script-card">
+      <div class="script-hdr">💼 LinkedIn connection request</div>
+      <div class="script-body">"Hi [Name] — I run the Snelling Staffing office in White Plains, focused on warehouse and light industrial temp workers for operations teams in Westchester. Not reaching out to sell anything right now — just building connections with ops leaders locally. Would be glad to connect."</div>
+      <span class="script-lbl">Follow-up after they accept (Day 3):</span>
+      <div class="script-body">"Thanks for connecting. Quick context: Snelling is different from most staffing agencies — we're the employer of record for all temp workers, so the WC and payroll burden sits with us, not you. If headcount flexibility is ever a challenge at [Company], happy to chat. No pressure."</div>
+    </div>
+    <div class="script-card">
+      <div class="script-hdr">📧 Cold email subject lines + body</div>
+      <span class="script-lbl">Subject lines (A/B test both):</span>
+      <div class="script-body">A: "Temp workers in Westchester — no payroll risk for [Company]"<br>B: "[Name], Snelling just opened in White Plains — quick note"</div>
+      <span class="script-lbl">Email body:</span>
+      <div class="script-body">Hi [Name],<br><br>I'm [Name], running the new Snelling Staffing office in White Plains. We specialize in temporary warehouse and light industrial workers for operations teams in Westchester and CT.<br><br>One thing that sets us apart: we're the employer of record for every worker we place. Your team gets the labor. We handle payroll, taxes, workers' comp, and HR. No liability transfer to you.<br><br>I'm not looking for a long-term commitment — just a 15-minute call to understand if there are moments where getting extra hands fast is a problem. If not, I'll leave you alone.<br><br>[Your name] | Snelling White Plains | [mobile]</div>
+    </div>
+    <div class="script-card">
+      <div class="script-hdr">🚶 In-person drop-in (industrial canvass)</div>
+      <div class="script-body">"Hi — I'm [Name] from Snelling Staffing. We just opened our White Plains office and I'm visiting operations teams in the area. Is the warehouse manager or operations director around? I just want to introduce myself and leave some info — takes two minutes."</div>
+      <span class="script-lbl">If the manager comes out:</span>
+      <div class="script-body">"Great to meet you. Quick version: we supply temp warehouse workers, and the difference with us is that there's zero payroll or WC exposure on your side — we're the employer of record. Do you ever have moments where you need extra people on short notice and it becomes a headache?"</div>
+    </div>
+  </div>
+
+  <!-- PIPELINE KPIs -->
+  <div class="bd-section" id="bd-pipeline">
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Funnel benchmarks — light industrial staffing, solo BD from White Plains</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Cold calls to get 1 discovery meeting</span><span class="pipeline-val">15–25 calls</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Discovery meetings to get 1 signed contract</span><span class="pipeline-val">3–5 meetings</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Time: first contact → first placement (warehouse)</span><span class="pipeline-val g">1–3 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Time: first contact → first placement (corporate)</span><span class="pipeline-val r">6–12 weeks</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Average workers per active account (light industrial)</span><span class="pipeline-val">2–6</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Revenue per active worker / month (at $28 bill)</span><span class="pipeline-val">$4,851</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Franchisee share per worker / month (est.)</span><span class="pipeline-val g">~$780</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">Workers needed to cover $8,700 fixed costs / month</span><span class="pipeline-val r">~11 employees</span></div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-hdr"><span class="phase-hdr-title">Weekly activity floor — what to hit every week as a solo founder</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">📞 Cold calls</span><span class="pipeline-val">100/week (20/day, 8–10am + 4–5pm)</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">💼 LinkedIn: new connections + follow-ups</span><span class="pipeline-val">50 new + 10 follow-ups/week</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">📧 Named personalized emails</span><span class="pipeline-val">20/week minimum</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">🚶 In-person canvass route</span><span class="pipeline-val">1 route/week (10–15 stops, ~3 hrs from White Plains)</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">🤝 Discovery meetings</span><span class="pipeline-val">5/week target — in-person preferred</span></div>
+      <div class="pipeline-row"><span class="pipeline-lbl">CRM update frequency</span><span class="pipeline-val">Daily — every prospect gets a next action date</span></div>
+    </div>
+  </div>
+
+  <!-- CT -->
+  <div class="bd-section" id="bd-ct">
+    <div class="ct-grid">
+      <div class="ct-zone a">
+        <div class="ct-zone-title">Zone A — Stamford / Greenwich / Norwalk</div>
+        <div class="ct-zone-body">
+          <strong>Market:</strong> Fortune 500 HQs. Charter Communications, Synchrony Financial, XPO Logistics, Booking Holdings, Indeed.<br><br>
+          <strong>Temp roles:</strong> Admin assistants, data entry, reception, HR support, project coordinators.<br><br>
+          <strong>Bill rate:</strong> $28–40/hr · <strong>Min wage:</strong> $16.94/hr CT<br>
+          <strong>Decision maker:</strong> HR Director or Office Manager<br><br>
+          <strong>⚠ MSP trap:</strong> Large corporates often have Managed Service Provider contracts (Randstad Source Right, Allegis). Always ask "Do you have a master vendor program?" before investing sales time. If yes — ask to be added as secondary/backup vendor.<br><br>
+          <strong>Outreach:</strong> LinkedIn + email only. No cold canvass — corporate parks require badge access. Request meeting after 2–3 touches.
+        </div>
+      </div>
+      <div class="ct-zone b">
+        <div class="ct-zone-title">Zone B — Bridgeport / Stratford / New Haven</div>
+        <div class="ct-zone-body">
+          <strong>Market:</strong> Manufacturing + logistics + aerospace. Sikorsky Aircraft (Stratford), supply chain manufacturers, New Haven logistics hubs.<br><br>
+          <strong>Temp roles:</strong> Production workers, assemblers, warehouse, material handlers, forklift operators, QC.<br><br>
+          <strong>Bill rate:</strong> $24–30/hr · <strong>Min wage:</strong> $16.94/hr CT<br>
+          <strong>Decision maker:</strong> Plant manager, warehouse supervisor<br><br>
+          <strong>Competition:</strong> Hamilton Connections and Merritt Staffing are entrenched. Target new accounts and underserved clients.<br><br>
+          <strong>Outreach:</strong> Physical canvass along I-95/Route 1 corridor. Owner-operated manufacturers respond to in-person visits. Batch as a full-day trip from White Plains.
+        </div>
+      </div>
+    </div>
+    <div class="note amber">
+      <strong>CT licensing — confirm before first placement:</strong> Connecticut requires an Employment Agency License for temp staffing operations. Confirm with HQ Franchising whether the Snelling system license covers CT, or whether you need a separate CT state registration. Also confirm your territory agreement explicitly covers CT geography before making your first placement there.
+    </div>
+  </div>
+</section>
+
+<!-- 08 INSIGHTS -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-tag">08 — Strategic Insights</div>
+    <div class="section-title">Key factors shaping your launch</div>
+  </div>
+  <div class="insights-grid">
+    <div class="insight teal"><div class="insight-title">Employer-of-record is your only un-copyable advantage</div><div class="insight-body">Every competitor shifts some WC and payroll burden back to the client. HireQuest's model means the client has zero payroll exposure, zero WC claims risk, and zero HR admin for temp workers. This is legally and operationally different — not just a talking point. Open every conversation with it. Clients who've had a workers' comp claim from a temp will sign immediately.</div></div>
+    <div class="insight amber"><div class="insight-title">$17/hr floor changes the break-even calculation</div><div class="insight-body">Westchester's minimum wage means realistic pay rates of $19–22/hr for reliable workers. At $20 pay / $28 bill your gross margin is $8/hr — tighter than most US markets. You make money on volume and fill rate, not margin per hour. Getting to 20+ active workers fast is the strategic imperative. Every worker below break-even costs you money on fixed costs.</div></div>
+    <div class="insight navy"><div class="insight-title">White Plains solves the transportation problem</div><div class="insight-body">Light industrial staffing's #1 operational failure mode is worker no-shows — especially on early morning warehouse shifts when transit is limited. White Plains is served by Metro-North directly from Yonkers (7 min) and has Bee-Line bus connections from Mount Vernon. Workers can reach your office to check in before dispatch. This reduces your no-show rate vs an office in suburban Scarsdale or Armonk.</div></div>
+    <div class="insight purple"><div class="insight-title">3PL clients are your fastest path to recurring revenue</div><div class="insight-body">3PL warehouses (Keurig Dr Pepper, Unis Logistics, Ultrafabrics) have structurally variable demand — their headcount swings with client volumes. They sign faster (1–3 weeks), have recurring needs, and can scale from 2 to 10 workers within a single account. Anchor your book here before investing time in corporate HQ accounts with 3–6 month procurement cycles.</div></div>
+    <div class="insight coral"><div class="insight-title">HireQuest's shrinking system is a franchisor risk to monitor</div><div class="insight-body">The FDD shows the Snelling system declined from 78 → 73 franchises 2023–2025, and HireQuest's royalty revenue fell 19% ($35.8M → $29.0M). This doesn't make Snelling a bad business, but it means the franchisor's support infrastructure is under financial pressure. HireQuest is publicly traded (NASDAQ: HQI) — review their quarterly filings quarterly as a franchisee.</div></div>
+    <div class="insight green"><div class="insight-title">Referral bonuses are your cheapest recruiting channel — activate early</div><div class="insight-body">Once you have 5+ active workers, launch a structured $50–75 referral bonus paid after 30 days on assignment. Worker-to-worker referrals in light industrial are the most reliable and lowest-cost sourcing channel — far cheaper than Indeed or Facebook at $100–200 per placed worker. Turn your workers into your best recruiters from Month 1.</div></div>
+  </div>
+</section>
+
+<!-- 09 RISKS -->
+<section class="section" id="risks">
+  <div class="section-header">
+    <div class="section-tag">09 — Risk Register</div>
+    <div class="section-title">What could go wrong</div>
+  </div>
+  <div class="risks-list">
+    <div class="risk-row"><div class="risk-num">R1</div><div><div class="risk-title">Worker no-show rate destroys client relationships</div><div class="risk-body">A no-show at a 6am warehouse shift damages a client relationship immediately and permanently. Build a bench roster 30% larger than active placements. Over-recruit, under-promise on capacity. Fill rate — not bill rate — determines whether you keep an account. White Plains HQ helps here: workers can check in at your office before dispatch, reducing ghost no-shows.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R2</div><div><div class="risk-title">WC loss ratio above 65% triggers punishing pass-through charges</div><div class="risk-body">If your workers' WC claims exceed 65% of premium, HQ charges you 100% of excess, capped at 130% of annual premium (or 200% if your premium was under $30K). Warehouse and light industrial carry real injury risk — forklift incidents, repetitive strain, slips. Vet placement sites carefully, avoid restricted WC codes, and actively manage light-duty return-to-work. The $75/day fee for not providing light duty is explicitly in the FDD.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R3</div><div><div class="risk-title">5-week cash lag creates a launch crisis</div><div class="risk-body">HireQuest pays your Franchisee's Share ~5 weeks after billing. You pay your staff, rent, and recruiting ads monthly from Day 1. At launch you will fund 5–6 weeks of fixed costs before your first check. At $8,700+/month in fixed costs, that's $10–15K you need in reserve beyond the FDD's minimum working capital estimate. Undercapitalize this and you have a cash crisis before your first placement delivers.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R4</div><div><div class="risk-title">Competing nationals have 25-year client relationships</div><div class="risk-body">Adecco, Manpower, and Merritt Staffing have been in this market for decades. Some clients have procurement agreements that make switching painful even if you're better. Don't waste time on locked accounts — identify which clients are actively frustrated with their current agency (ask on every canvass visit) and go deep there first. One dissatisfied Adecco client is worth more than ten cold prospects.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R5</div><div><div class="risk-title">HireQuest's declining system revenue may reduce support quality</div><div class="risk-body">With 5 net franchise closures in 2025 and royalty revenue down 19% over two years, HQ's support infrastructure is under financial pressure. Before signing, confirm: how many support staff are dedicated to franchisees? What is the current ratio? A franchisor with declining revenue may quietly reduce support responsiveness over your first year.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R6</div><div><div class="risk-title">CT operations without employment agency license</div><div class="risk-body">Connecticut requires an Employment Agency License to operate temp staffing in the state. Placing workers in CT before securing this license exposes you and potentially HQ to regulatory action. Confirm the licensing requirement and whether the Snelling system covers it — before making your first CT placement, not after.</div></div></div>
+    <div class="risk-row"><div class="risk-num">R7</div><div><div class="risk-title">Open-ended technology fee</div><div class="risk-body">The Technology Fee is disclosed as "allocation of actual cost" — HQ can change it with notice, and it's non-refundable. If HQ undertakes major technology investments, your monthly tech cost could increase significantly. Model it conservatively at $300–500/month and watch for any changes in quarterly HireQuest earnings calls.</div></div></div>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="section-header"><div class="section-tag">10 — Due Diligence Questions</div><div class="section-title" style="font-size:20px">Ask HQ Franchising before signing</div></div>
+    <div class="q-list">
+      <div class="q-row"><div class="q-num">Q1</div><div class="q-text">Map my territory to specific southern Westchester zip codes centered on White Plains, Elmsford, Mount Vernon, Yonkers, and New Rochelle — not "Westchester County" as a boundary.</div><span class="q-cat cat-wc">Territory</span></div>
+      <div class="q-row"><div class="q-num">Q2</div><div class="q-text">Does my franchise territory include Connecticut (Stamford, Greenwich, Bridgeport), or is CT a separate territory I need to negotiate rights to?</div><span class="q-cat cat-ct">CT Coverage</span></div>
+      <div class="q-row"><div class="q-num">Q3</div><div class="q-text">What is the current Technology Fee amount? How has it changed in the past 24 months and what triggers an increase?</div><span class="q-cat cat-fin">Financial</span></div>
+      <div class="q-row"><div class="q-num">Q4</div><div class="q-text">The FDD shows 5 net franchise closures in 2025 and royalty revenue down 19% over two years. What is driving this — volume or unit count? What is your current support staff to franchisee ratio?</div><span class="q-cat cat-fin">Financial</span></div>
+      <div class="q-row"><div class="q-num">Q5</div><div class="q-text">Show me the full list of restricted and prohibited workers' comp classification codes from the Brand Standards Manual — specifically for NY warehouse and light industrial placements.</div><span class="q-cat cat-ops">WC / Risk</span></div>
+      <div class="q-row"><div class="q-num">Q6</div><div class="q-text">What are the negotiated minimum performance standards for my territory? Show me the formula and territory-specific targets before I sign.</div><span class="q-cat cat-fin">Financial</span></div>
+      <div class="q-row"><div class="q-num">Q7</div><div class="q-text">Can you connect me with a franchisee who launched in the last 24 months in a similar urban Northeast market before I make my decision?</div><span class="q-cat cat-ops">Reference</span></div>
+      <div class="q-row"><div class="q-num">Q8</div><div class="q-text">Does the Snelling system license cover Connecticut employment agency licensing, or do I need a separate CT state license before placing workers there?</div><span class="q-cat cat-leg">Legal / CT</span></div>
+      <div class="q-row"><div class="q-num">Q9</div><div class="q-text">Can I add HireQuest Health as an add-on in Year 1, and what is the approval process and any additional fees?</div><span class="q-cat cat-ops">Expansion</span></div>
+      <div class="q-row"><div class="q-num">Q10</div><div class="q-text">Is there any right of first refusal on a second territory (Fairfield County CT) at today's price if I validate the model in Year 1?</div><span class="q-cat cat-fin">Deal Terms</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">Snelling <span>Staffing</span> · White Plains</div>
+  <div class="footer-meta">June 2026 · Westchester + Connecticut · Market + Calculator + BD Plan · For internal use only</div>
+</footer>
+
+<script>
+const MO=4.33;
+function fmtK(n){const neg=n<0,a=Math.abs(n);let s=a>=1000000?'$'+(a/1e6).toFixed(1)+'M':a>=1000?'$'+Math.round(a).toLocaleString():'$'+a.toFixed(0);return neg?'-'+s:s;}
+function fmtPct(n){return(n*100).toFixed(1)+'%'}
+function $(id){return document.getElementById(id)}
+
+let chart=null;
+
+function calc(){
+  const emps=+$('sl-emps').value||0, pay=+$('sl-pay').value||0, bill=+$('sl-bill').value||0,
+        hrs=+$('sl-hrs').value||0, royR=(+$('sl-roy').value||0)/100,
+        staff=+$('sl-staff').value||0, rent=+$('sl-rent').value||0, rec=+$('sl-rec').value||0;
+
+  $('out-emps').textContent=emps;
+  $('out-pay').textContent='$'+pay.toFixed(2);
+  $('out-bill').textContent='$'+bill.toFixed(2);
+  $('out-hrs').textContent=hrs;
+  $('out-roy').textContent=(royR*100).toFixed(1)+'%';
+  $('out-staff').textContent='$'+Math.round(staff).toLocaleString();
+  $('out-rent').textContent='$'+Math.round(rent).toLocaleString();
+  $('out-rec').textContent='$'+Math.round(rec).toLocaleString();
+
+  const gm=bill-pay, hrsMo=hrs*emps*MO, revMo=bill*hrsMo;
+  const wages=pay*hrsMo, fundFee=pay*0.045*hrsMo, royFee=gm*royR*hrsMo, poolFee=revMo*0.035;
+  const totalHQ=fundFee+royFee+poolFee;
+  const shareHr=gm*(1-royR)-pay*0.045-bill*0.035;
+  const shareMo=shareHr*hrsMo;
+  const staffB=staff*1.12, techOther=revMo*0.007+25;
+  const fixedMo=staffB+rent+rec+techOther;
+  const netMo=shareMo-fixedMo, annNet=netMo*12;
+  const netPct=revMo>0?netMo/revMo:0;
+  const netPerEmp=emps>0?shareMo/emps:0;
+  const beEmps=netPerEmp>0?Math.ceil(fixedMo/netPerEmp):null;
+
+  $('m-rev').textContent=fmtK(revMo);
+  $('m-rev-sub').textContent=emps+' workers × '+hrs+'h × 4.33 wks';
+  $('m-share').textContent=fmtK(shareMo);
+  $('m-share-sub').textContent=revMo>0?fmtPct(shareMo/revMo)+' of billings':'—';
+  $('m-profit').textContent=fmtK(netMo);
+  $('m-profit').className='calc-kpi-val '+(netMo>=0?'green':'red');
+  $('m-margin').textContent=fmtPct(netPct)+' net margin';
+  $('m-annual').textContent=fmtK(annNet);
+  $('m-annual').className='calc-kpi-val '+(annNet>=0?'green':'red');
+  $('m-be').textContent=beEmps?'Break-even: '+beEmps+' employees':'—';
+
+  const f=n=>'-'+fmtK(Math.abs(n));
+  $('b-rev').textContent=fmtK(revMo);
+  $('b-wpct').textContent=revMo>0?fmtPct(wages/revMo):'—'; $('b-wages').textContent=f(wages);
+  $('b-fpct').textContent=revMo>0?fmtPct(fundFee/revMo):'—'; $('b-fund').textContent=f(fundFee);
+  $('b-rpct').textContent=revMo>0?fmtPct(royFee/revMo):'—'; $('b-roy').textContent=f(royFee);
+  $('b-pool').textContent=f(poolFee);
+  $('b-spct').textContent=revMo>0?fmtPct(shareMo/revMo):'—'; $('b-share').textContent=fmtK(shareMo);
+  $('b-stpct').textContent=revMo>0?fmtPct(staffB/revMo):'—'; $('b-staff').textContent=f(staffB);
+  $('b-rnpct').textContent=revMo>0?fmtPct(rent/revMo):'—'; $('b-rent').textContent=f(rent);
+  $('b-rcpct').textContent=revMo>0?fmtPct(rec/revMo):'—'; $('b-rec').textContent=f(rec);
+  $('b-tech').textContent=f(techOther);
+  $('b-mpct').textContent=fmtPct(netPct); $('b-mpct').className=netMo>=0?'col-green':'col-red';
+  $('b-profit').textContent=fmtK(netMo); $('b-profit').className=netMo>=0?'col-green':'col-red';
+
+  $('tier-note').textContent='At $'+pay.toFixed(2)+'/hr pay · $'+bill.toFixed(2)+'/hr bill · '+emps+' employees · '+hrs+' hrs/wk: gross margin $'+gm.toFixed(2)+'/hr · franchisee share $'+shareHr.toFixed(2)+'/hr · break-even '+( beEmps||'∞')+' employees · annual net '+fmtK(annNet)+'.';
+
+  const tot=revMo||1;
+  function setBar(id,v){const el=$(id);el.style.width=Math.max(0,Math.round(v/tot*100))+'%';el.style.height='9px';el.style.display='block';}
+  setBar('bar-wages',wages); setBar('bar-hq',totalHQ); setBar('bar-staff',staffB);
+  setBar('bar-rent',rent); setBar('bar-rec',rec); setBar('bar-other',techOther);
+  setBar('bar-profit',Math.max(0,netMo));
+
+  const lvls=[5,8,10,15,20,25,30,40,50];
+  const profits=lvls.map(e=>{
+    const h=hrs*e*MO,r=bill*h,s=(gm*(1-royR)-pay*0.045-bill*0.035)*h;
+    return Math.round(s-staffB-rent-rec-r*0.007-25);
+  });
+  const cols=profits.map(p=>p>=0?'#1e7a48':'#c0392b');
+
+  if(chart){chart.data.datasets[0].data=profits;chart.data.datasets[0].backgroundColor=cols;chart.update();}
+  else{
+    chart=new Chart($('mainChart'),{
+      type:'bar',
+      data:{labels:lvls.map(e=>e+' emps'),datasets:[{label:'Net profit',data:profits,backgroundColor:cols,borderRadius:3,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' Net profit: '+(c.raw<0?'-$':'$')+Math.abs(c.raw).toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#8a8480'}},y:{ticks:{font:{size:10},color:'#8a8480',callback:v=>(v<0?'-$':'$')+Math.abs(v/1000)+'K'},grid:{color:'rgba(0,0,0,0.04)'}}}}
+    });
+  }
+}
+
+['sl-emps','sl-pay','sl-bill','sl-hrs','sl-roy','sl-staff','sl-rent','sl-rec'].forEach(id=>$(id).addEventListener('input',calc));
+calc();
+
+// BD tabs
+function showBD(id,el){
+  document.querySelectorAll('.bd-section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.bd-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('bd-'+id).classList.add('show');
+  el.classList.add('active');
+}
+
+// Nav active state on scroll
+const sections=document.querySelectorAll('section[id],.section[id]');
+const navPills=document.querySelectorAll('.nav-pill');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id;});
+  navPills.forEach(p=>{p.classList.toggle('active',p.getAttribute('href')==='#'+cur);});
+},{passive:true});
+</script>
+</body>
+</html>
